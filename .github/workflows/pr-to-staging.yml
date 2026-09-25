@@ -1,0 +1,49 @@
+name: PR to Staging - Build Check
+
+on:
+  pull_request:
+    branches:
+      - staging
+
+jobs:
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build frontend
+        run: npm run build
+        
+      - name: Verify build output
+        run: test -d dist && echo "✓ Frontend build successful"
+
+  pr-status:
+    name: PR Build Status
+    needs: [build-frontend]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Check build results
+        run: |
+          if [ "${{ needs.build-frontend.result }}" == "success" ]; then
+            echo "✓ Frontend build passed! PR can be merged to staging."
+            exit 0
+          else
+            echo "✗ Build failed. Fix errors before merging to staging."
+            exit 1
+          fi
