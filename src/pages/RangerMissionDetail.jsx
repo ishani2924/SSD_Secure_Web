@@ -128,6 +128,7 @@ const RangerMissionDetail = () => {
         if (evidenceForm.notes) form.append('notes', evidenceForm.notes);
         if (evidenceForm.conditionSummary) form.append('conditionSummary', evidenceForm.conditionSummary);
 
+        // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - Token stored in localStorage vulnerable to XSS
         const token = localStorage.getItem('token');
         const base = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
         const url = `${base.replace(/\/$/, '')}/ranger/cases/${encodeURIComponent(caseId)}/evidence`;

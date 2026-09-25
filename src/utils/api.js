@@ -10,6 +10,8 @@ const api = axios.create({
     }
 });
 
+// VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - Tokens stored in localStorage can be vulnerable to XSS attacks
+// FIX: Consider using httpOnly cookies instead of localStorage for token storage to prevent XSS-based token theft
 // Add a request interceptor to include auth token
 api.interceptors.request.use(
     (config) => {

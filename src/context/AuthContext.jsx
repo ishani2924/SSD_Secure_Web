@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+// VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - Tokens stored in localStorage can be vulnerable to XSS attacks
+// FIX: Consider using httpOnly cookies instead of localStorage for token storage to prevent XSS-based token theft
     useEffect(() => {
         const checkAuth = async () => {
             const token = localStorage.getItem('token');
@@ -30,6 +32,7 @@ export const AuthProvider = ({ children }) => {
         checkAuth();
     }, []);
 
+    // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - Token stored in localStorage vulnerable to XSS
     const login = async (email, password) => {
         setError(null);
         try {
@@ -43,6 +46,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - Token stored in localStorage vulnerable to XSS
     const register = async (userData) => {
         setError(null);
         try {
@@ -56,6 +60,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - Token stored in localStorage vulnerable to XSS
     const logout = () => {
         localStorage.removeItem('token');
         setUser(null);
