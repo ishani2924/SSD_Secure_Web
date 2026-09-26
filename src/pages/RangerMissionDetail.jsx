@@ -128,13 +128,12 @@ const RangerMissionDetail = () => {
         if (evidenceForm.notes) form.append('notes', evidenceForm.notes);
         if (evidenceForm.conditionSummary) form.append('conditionSummary', evidenceForm.conditionSummary);
 
-        // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - Token stored in localStorage vulnerable to XSS
-        const token = localStorage.getItem('token');
+        // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: Using cookies instead of localStorage
         const base = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
         const url = `${base.replace(/\/$/, '')}/ranger/cases/${encodeURIComponent(caseId)}/evidence`;
         const res = await fetch(url, {
             method: 'POST',
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
+            credentials: 'include', // Include cookies for authentication
             body: form
         });
         const data = await res.json().catch(() => ({}));

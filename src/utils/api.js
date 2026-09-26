@@ -7,23 +7,11 @@ const api = axios.create({
     timeout: 15_000,
     headers: {
         'Content-Type': 'application/json'
-    }
+    },
+    withCredentials: true // Enable cookies for cross-origin requests
 });
 
-// VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - Tokens stored in localStorage can be vulnerable to XSS attacks
-// FIX: Consider using httpOnly cookies instead of localStorage for token storage to prevent XSS-based token theft
-// Add a request interceptor to include auth token
-api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
+// VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: Now using httpOnly cookies instead of localStorage
+// Removed Authorization header injection since cookies are handled automatically by the browser
 
 export default api;
