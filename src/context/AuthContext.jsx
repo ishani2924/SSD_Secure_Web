@@ -61,12 +61,26 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    const facebookLogin = async (accessToken, userID) => {
+        setError(null);
+        try {
+            const res = await api.post('/auth/facebook', { accessToken, userID });
+            localStorage.setItem('token', res.data.token);
+            setUser(res.data.user);
+            return res.data;
+        } catch (err) {
+            setError(err.response?.data?.message || 'Facebook login failed');
+            throw err;
+        }
+    };
+
     const value = {
         user,
         loading,
         error,
         login,
         register,
+        facebookLogin,
         logout,
         isAuthenticated: !!user
     };
