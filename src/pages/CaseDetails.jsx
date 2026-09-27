@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import InvestigationManagement from '../components/InvestigationManagement';
 import { useFixedNavOffsetClass } from '../hooks/useFixedNavOffsetClass';
 import api from '../utils/api';
+import { useAuth } from '../context/AuthContext';
 import { 
   ArrowLeft, 
   MapPin, 
@@ -23,10 +24,21 @@ import {
   MessageSquare
 } from 'lucide-react';
 
+/**
+ * [SECURITY FIX — Vulnerability 7: IDOR] FIXED (defense in depth)
+ * UI hides edit/investigation write actions unless user is admin or assigned officer.
+ * Authoritative checks remain on the API (utils/caseAccess.js + case routes).
+ */
+const getEntityId = (value) => {
+    if (!value) return null;
+    return (value._id ?? value).toString();
+};
+
 const CaseDetails = () => {
     const { caseId } = useParams();
     const navigate = useNavigate();
     const navPt = useFixedNavOffsetClass();
+    const { user } = useAuth();
     const [case_, setCase] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -34,8 +46,6 @@ const CaseDetails = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState({});
 
-    // VULNERABILITY 7: Broken Access Control (IDOR) - Frontend fetches case details without verifying user ownership
-    // FIX: Backend should verify user is assigned officer or admin before returning case data
     const fetchCaseDetails = useCallback(async () => {
         try {
             setLoading(true);
@@ -53,9 +63,17 @@ const CaseDetails = () => {
         fetchCaseDetails();
     }, [fetchCaseDetails]);
 
-    // VULNERABILITY 7: Broken Access Control (IDOR) - Frontend allows editing case without verifying user ownership
-    // FIX: Backend should verify user is assigned officer or admin before allowing case updates
+    const currentUserId = getEntityId(user);
+    const assignedOfficerId = case_ ? getEntityId(case_.assignedOfficer) : null;
+    const canModifyCase =
+        user?.role === 'ADMIN' ||
+        (currentUserId && assignedOfficerId && currentUserId === assignedOfficerId);
+
     const handleSaveEdit = async () => {
+        if (!canModifyCase) {
+            setError('You do not have permission to edit this case');
+            return;
+        }
         try {
             await api.put(`/cases/${caseId}`, editData);
             setCase(editData);
@@ -172,7 +190,7 @@ const CaseDetails = () => {
                                         Cancel
                                     </button>
                                 </>
-                            ) : (
+                            ) : canModifyCase ? (
                                 <button
                                     onClick={() => setIsEditing(true)}
                                     className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-surface-light transition-colors"
@@ -180,7 +198,7 @@ const CaseDetails = () => {
                                     <Edit size={16} />
                                     Edit
                                 </button>
-                            )}
+                            ) : null}
                         </div>
                     </div>
                 </div>
@@ -361,6 +379,7 @@ const CaseDetails = () => {
                 {activeTab === 'investigation' && (
                     <InvestigationManagement 
                         caseId={caseId} 
+                        readOnly={!canModifyCase}
                         onInvestigationUpdate={fetchCaseDetails}
                     />
                 )}

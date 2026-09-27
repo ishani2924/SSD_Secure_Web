@@ -128,12 +128,12 @@ const RangerMissionDetail = () => {
         if (evidenceForm.notes) form.append('notes', evidenceForm.notes);
         if (evidenceForm.conditionSummary) form.append('conditionSummary', evidenceForm.conditionSummary);
 
-        // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: Using cookies instead of localStorage
+        // [SECURITY FIX — Vulnerability 6] multipart upload auth via cookies, not ?token= in URL
         const base = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
         const url = `${base.replace(/\/$/, '')}/ranger/cases/${encodeURIComponent(caseId)}/evidence`;
         const res = await fetch(url, {
             method: 'POST',
-            credentials: 'include', // Include cookies for authentication
+            credentials: 'include',
             body: form
         });
         const data = await res.json().catch(() => ({}));
