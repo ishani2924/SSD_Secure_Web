@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { UserPlus, Mail, Lock, User, Phone, Eye, EyeOff, Github, Leaf, PawPrint, ArrowRight, Shield, Camera, Heart, MapPin, Trophy, Users } from 'lucide-react';
@@ -160,7 +160,7 @@ const Register = () => {
                             {/* Hero Message with Wildlife Statistics */}
                             <div className="space-y-6">
                                 <div className="relative">
-                                    <span className="absolute text-8xl text-amber-500/20 -top-8 -left-4">🦁</span>
+                                    <span className="absolute text-8xl text-amber-500/20 -top-8 -left-4">ðŸ¦</span>
                                     <h2 className="relative pl-6 text-4xl font-bold leading-tight text-white lg:text-5xl">
                                         Protect Africa's
                                         <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-300">
@@ -264,7 +264,7 @@ const Register = () => {
                                     {/* Wildlife Silhouettes */}
                                     <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/60 to-transparent" />
                                     <div className="absolute text-2xl bottom-2 left-6 text-white/20">
-                                        🦒 🐘 🦁
+                                        ðŸ¦’ ðŸ˜ ðŸ¦
                                     </div>
                                     
                                     <div className="absolute top-6 left-6">
@@ -485,6 +485,7 @@ const Register = () => {
                                             </button>
                                             <button
                                                 type="button"
+                                                onClick={() => window.location.href = "http://localhost:5000/api/auth/google"}
                                                 className="flex items-center justify-center gap-2 px-4 py-2.5 bg-black/40 border border-amber-500/30 rounded-lg text-amber-200/80 hover:text-white hover:bg-amber-600/20 hover:border-amber-400 transition-all text-sm"
                                             >
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -516,10 +517,10 @@ const Register = () => {
                             <div className="mt-6 text-center">
                                 <p className="flex items-center justify-center gap-2 text-xs text-amber-200/50">
                                     <Shield size={12} />
-                                    SSL Encrypted • 100% of proceeds go to African wildlife conservation
+                                    SSL Encrypted â€¢ 100% of proceeds go to African wildlife conservation
                                 </p>
                                 <p className="mt-2 text-xs text-amber-200/30">
-                                    Verified non-profit • EIN: 84-1234567
+                                    Verified non-profit â€¢ EIN: 84-1234567
                                 </p>
                             </div>
                         </div>

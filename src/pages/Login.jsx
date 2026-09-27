@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Leaf, PawPrint, Shield, Camera } from 'lucide-react';
@@ -86,7 +86,7 @@ const Login = () => {
                                         Real-world assets meet decentralized finance. Protecting biodiversity through transparent tokenization.
                                     </p>
                                 </div>
-                                <p className="pl-6 text-lg text-white/60">— WildAsset Manifesto</p>
+                                <p className="pl-6 text-lg text-white/60">â€” WildAsset Manifesto</p>
                             </div>
 
                             {/* Impact Stats - Minimal */}
@@ -200,7 +200,7 @@ const Login = () => {
                                                 <input
                                                     type={showPassword ? 'text' : 'password'}
                                                     className="block w-full py-3 pl-10 pr-10 text-white transition-all border bg-white/5 border-white/10 rounded-xl placeholder-white/30 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
-                                                    placeholder="••••••••"
+                                                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                                                     value={password}
                                                     onChange={(e) => setPassword(e.target.value)}
                                                     required
@@ -281,7 +281,7 @@ const Login = () => {
                             {/* Trust Badge */}
                             <div className="mt-6 text-center">
                                 <p className="text-xs text-white/40">
-                                    Protected by end-to-end encryption • Non-profit initiative
+                                    Protected by end-to-end encryption â€¢ Non-profit initiative
                                 </p>
                             </div>
                         </div>
