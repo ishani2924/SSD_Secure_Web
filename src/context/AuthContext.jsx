@@ -19,6 +19,14 @@ export const AuthProvider = ({ children }) => {
             try {
                 const res = await api.get('/auth/profile');
                 setUser(res.data);
+
+                // [Google OAuth] Clean up ?login=success from URL after Google callback redirect
+                // The backend sets cookies and redirects here; we just tidy up the URL
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('login') === 'success') {
+                    const cleanUrl = window.location.pathname;
+                    window.history.replaceState({}, '', cleanUrl);
+                }
             } catch (err) {
                 console.error('Auth verification failed', err);
                 setUser(null);
