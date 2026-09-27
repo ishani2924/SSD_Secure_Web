@@ -12,29 +12,27 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+// VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: Now using httpOnly cookies instead of localStorage
+// Cookies are handled automatically by the browser, preventing XSS-based token theft
     useEffect(() => {
         const checkAuth = async () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                try {
-                    const res = await api.get('/auth/profile');
-                    setUser(res.data);
-                } catch (err) {
-                    console.error('Auth verification failed', err);
-                    localStorage.removeItem('token');
-                    setUser(null);
-                }
+            try {
+                const res = await api.get('/auth/profile');
+                setUser(res.data);
+            } catch (err) {
+                console.error('Auth verification failed', err);
+                setUser(null);
             }
             setLoading(false);
         };
         checkAuth();
     }, []);
 
+    // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: No localStorage usage
     const login = async (email, password) => {
         setError(null);
         try {
             const res = await api.post('/auth/login', { email, password });
-            localStorage.setItem('token', res.data.token);
             setUser(res.data.user);
             return res.data;
         } catch (err) {
@@ -43,11 +41,11 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: No localStorage usage
     const register = async (userData) => {
         setError(null);
         try {
             const res = await api.post('/auth/register', userData);
-            localStorage.setItem('token', res.data.token);
             setUser(res.data.user);
             return res.data;
         } catch (err) {
@@ -56,9 +54,15 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        setUser(null);
+    // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: Now using backend logout endpoint to clear cookies
+    const logout = async () => {
+        try {
+            await api.post('/auth/logout');
+        } catch (err) {
+            console.error('Logout error:', err);
+        } finally {
+            setUser(null);
+        }
     };
 
     const value = {

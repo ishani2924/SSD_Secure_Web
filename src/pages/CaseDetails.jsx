@@ -34,6 +34,8 @@ const CaseDetails = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState({});
 
+    // VULNERABILITY 7: Broken Access Control (IDOR) - Frontend fetches case details without verifying user ownership
+    // FIX: Backend should verify user is assigned officer or admin before returning case data
     const fetchCaseDetails = useCallback(async () => {
         try {
             setLoading(true);
@@ -51,6 +53,8 @@ const CaseDetails = () => {
         fetchCaseDetails();
     }, [fetchCaseDetails]);
 
+    // VULNERABILITY 7: Broken Access Control (IDOR) - Frontend allows editing case without verifying user ownership
+    // FIX: Backend should verify user is assigned officer or admin before allowing case updates
     const handleSaveEdit = async () => {
         try {
             await api.put(`/cases/${caseId}`, editData);
