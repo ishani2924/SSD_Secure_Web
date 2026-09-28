@@ -1,16 +1,36 @@
-# React + Vite
+# SSD Assignment - Secure Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 1. Team Members
+* [R A D P Ranathunga] - [IT23217386]
+* [D H L N Jayalath] - [IT23202368]
+* [N G N Tharuka] - [IT23157200]
+* [J M U I Jayasundara] - [IT23233676]
 
-Currently, two official plugins are available:
+## 2. Project Links
+* **Original Project Repository:** 
+  * Web: https://github.com/Daniru12/WildSafe-web
+  * Backend: https://github.com/Daniru12/WildSafe-back
+* **Modified Project Repository:** [Github Link to Modified Project]
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 3. Video Presentation
+* **YouTube Video Link:** [YouTube Link] 
+  * *Description:* This video describes the vulnerabilities found, the fixes implemented, and the OAuth/Open ID connect implementation.
 
-## React Compiler
+## 4. Project Vulnerabilities & Fixes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Below is a summary of the vulnerabilities identified in the original project and how they were mitigated in the modified version.
 
-## Expanding the ESLint configuration
+| Vulnerability Type | Location/Description in Original Project | Implemented Fix |
+| :--- | :--- | :--- |
+| **Cross-Site Scripting (XSS)** | [Explain where XSS was possible, e.g., user input reflecting on UI without sanitization] | [Explain the fix, e.g., added input sanitization, encoding, etc.] |
+| **Injection (SQL/NoSQL)** | [Explain the injection point] | [Explain the fix, e.g., parameterized queries, ORM usage] |
+| **Broken Authentication** | [Explain issues with login/session management] | [Explain the fix, and mention the OAuth/Open ID connect integration here] |
+| **Cross-Site Request Forgery (CSRF)** | [Explain where CSRF was possible] | [Explain the fix, e.g., added CSRF tokens] |
+| **Insecure Direct Object Reference (IDOR)** | [Explain the IDOR vulnerability] | [Explain the fix, e.g., proper access control checks before data retrieval] |
+| **Security Misconfiguration** | [Explain misconfigurations, e.g., default passwords, open CORS] | [Explain the fix] |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### OAuth / OpenID Connect Implementation
+* **Details:** [Provide a brief description of how and where OAuth/OpenID Connect was implemented in the project, e.g., Google/GitHub Login integrated using Passport.js or a specific AuthContext.]
+
+---
+*Note: Please update the placeholders (in brackets) with your actual team details, links, and specific project vulnerabilities.*
