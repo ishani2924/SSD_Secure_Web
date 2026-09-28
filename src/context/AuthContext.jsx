@@ -22,6 +22,14 @@ export const AuthProvider = ({ children }) => {
             try {
                 const res = await api.get('/auth/profile');
                 setUser(res.data);
+
+                // [Google OAuth] Clean up ?login=success from URL after Google callback redirect
+                // The backend sets cookies and redirects here; we just tidy up the URL
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('login') === 'success') {
+                    const cleanUrl = window.location.pathname;
+                    window.history.replaceState({}, '', cleanUrl);
+                }
             } catch (err) {
                 console.error('Auth verification failed', err);
                 setUser(null);
@@ -65,12 +73,26 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const facebookLogin = async (accessToken, userID) => {
+        setError(null);
+        try {
+            const res = await api.post('/auth/facebook', { accessToken, userID });
+            localStorage.setItem('token', res.data.token);
+            setUser(res.data.user);
+            return res.data;
+        } catch (err) {
+            setError(err.response?.data?.message || 'Facebook login failed');
+            throw err;
+        }
+    };
+
     const value = {
         user,
         loading,
         error,
         login,
         register,
+        facebookLogin,
         logout,
         isAuthenticated: !!user
     };
