@@ -16,7 +16,8 @@ import {
   Flag
 } from 'lucide-react';
 
-const InvestigationManagement = ({ caseId, onInvestigationUpdate }) => {
+/** [SECURITY FIX — Vulnerability 7] readOnly when user is not allowed to PUT /cases/:id/investigation */
+const InvestigationManagement = ({ caseId, onInvestigationUpdate, readOnly = false }) => {
     const [investigation, setInvestigation] = useState({
         findings: [],
         evidence: [],
@@ -52,6 +53,10 @@ const InvestigationManagement = ({ caseId, onInvestigationUpdate }) => {
     }, [fetchInvestigation]);
 
     const handleAddFinding = async () => {
+        if (readOnly) {
+            setError('You do not have permission to update this investigation');
+            return;
+        }
         if (!newFinding.trim()) {
             setError('Please enter a finding description');
             return;
@@ -82,6 +87,10 @@ const InvestigationManagement = ({ caseId, onInvestigationUpdate }) => {
     };
 
     const handleAddAction = async () => {
+        if (readOnly) {
+            setError('You do not have permission to update this investigation');
+            return;
+        }
         if (!newAction.trim()) {
             setError('Please enter an action description');
             return;
@@ -113,6 +122,10 @@ const InvestigationManagement = ({ caseId, onInvestigationUpdate }) => {
     };
 
     const handleEvidenceUpload = async () => {
+        if (readOnly) {
+            setError('You do not have permission to update this investigation');
+            return;
+        }
         if (evidenceFiles.length === 0) {
             setError('Please select evidence files to upload');
             return;
@@ -180,6 +193,12 @@ const InvestigationManagement = ({ caseId, onInvestigationUpdate }) => {
                 <div className="bg-red-500/10 border border-red-500 text-red-700 p-4 rounded-lg flex items-center gap-2">
                     <AlertCircle size={20} />
                     {error}
+                </div>
+            )}
+
+            {readOnly && (
+                <div className="bg-amber-500/10 border border-amber-500 text-amber-800 p-4 rounded-lg text-sm">
+                    You have read-only access to this investigation. Only the assigned officer or an admin can add findings, actions, or evidence.
                 </div>
             )}
 

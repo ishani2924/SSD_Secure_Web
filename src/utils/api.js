@@ -1,5 +1,11 @@
 import axios from 'axios';
 
+/**
+ * [SECURITY FIX — Vulnerability 6: Token leakage via URL/localStorage] FIXED
+ * Previously tokens could be stored in localStorage or appended to URLs, leaking via
+ * history, Referer headers, or XSS. Session JWTs are now sent only as httpOnly cookies
+ * (set by the API); this client uses withCredentials and does not attach Authorization headers.
+ */
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
@@ -8,10 +14,7 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json'
     },
-    withCredentials: true // Enable cookies for cross-origin requests
+    withCredentials: true
 });
-
-// VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: Now using httpOnly cookies instead of localStorage
-// Removed Authorization header injection since cookies are handled automatically by the browser
 
 export default api;

@@ -1,6 +1,11 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
 
+/**
+ * [SECURITY FIX — Vulnerability 6: Token leakage via URL/localStorage] FIXED
+ * Auth state is derived from GET /auth/profile using cookie-based sessions. Login/register
+ * never persist tokens in localStorage or query strings; logout clears httpOnly cookies server-side.
+ */
 const AuthContext = createContext();
 
 // Hook is colocated with provider; Vite fast refresh expects only components in this file.
@@ -12,8 +17,6 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-// VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: Now using httpOnly cookies instead of localStorage
-// Cookies are handled automatically by the browser, preventing XSS-based token theft
     useEffect(() => {
         const checkAuth = async () => {
             try {
@@ -28,7 +31,6 @@ export const AuthProvider = ({ children }) => {
         checkAuth();
     }, []);
 
-    // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: No localStorage usage
     const login = async (email, password) => {
         setError(null);
         try {
@@ -41,7 +43,6 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: No localStorage usage
     const register = async (userData) => {
         setError(null);
         try {
@@ -54,7 +55,6 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // VULNERABILITY 6: Sensitive Information in URL (Token Leakage) - FIXED: Now using backend logout endpoint to clear cookies
     const logout = async () => {
         try {
             await api.post('/auth/logout');
